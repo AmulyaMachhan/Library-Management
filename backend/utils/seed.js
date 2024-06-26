@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { User } from "../models/user.model.js";
 import { Book } from "../models/book.model.js";
+import { DB_NAME } from "../constants.js";
 
 dotenv.config();
 
@@ -71,16 +72,12 @@ const books = [
 
 const seed = async () => {
   try {
-    await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/library",
-      {}
+    const connectionInstance = await mongoose.connect(
+      `${process.env.MONGODB_URI}/${DB_NAME}`
     );
-    console.log("Connected to MongoDB");
-
-    // Clear existing data
-    await User.deleteMany({});
-    await Book.deleteMany({});
-    console.log("Cleared existing data");
+    console.log(
+      `MONGODB CONNECTED SUCCESSFULLY !! HOST ${connectionInstance.connection.host}`
+    );
 
     // Insert sample data
     await User.insertMany(users);
