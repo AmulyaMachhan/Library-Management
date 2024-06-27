@@ -1,5 +1,5 @@
-import { Book } from "../models/book.model";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Book } from "../models/book.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getAllBooks = asyncHandler(async (req, res) => {
   try {
