@@ -58,11 +58,9 @@ export const returnBook = asyncHandler(async (req, res) => {
     });
 
     if (!transaction)
-      return res
-        .status(400)
-        .json({
-          message: "No active transaction found for this book and user",
-        });
+      return res.status(400).json({
+        message: "No active transaction found for this book and user",
+      });
 
     // Calculate rent
     const issue = new Date(transaction.issueDate);
@@ -77,6 +75,29 @@ export const returnBook = asyncHandler(async (req, res) => {
     await transaction.save();
 
     res.json({ message: "Book returned successfully", rent });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+export const getTransactionsByBook = asyncHandler(async (req, res) => {
+  const { bookName } = req.params;
+
+  try {
+    const book = await Book.findOne({ name: bookName });
+    if (!book) return res.status(400).json({ message: "Book not found" });
+
+    const transactions = await Transaction.find({ bookId: book._id }).populate(
+      "userId"
+    );
+
+    const totalCount = transactions.length;
+    const currentTransaction = transactions.find((t) => !t.returnDate);
+    const status = currentTransaction
+      ? { currentlyIssuedTo: currentTransaction.userId.name }
+      : { status: "Not issued currently" };
+
+    res.json({ totalCount, status });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
