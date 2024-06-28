@@ -81,7 +81,7 @@ export const returnBook = asyncHandler(async (req, res) => {
 });
 
 export const getTransactionsByBook = asyncHandler(async (req, res) => {
-  const { bookName } = req.params;
+  const { bookName } = req.query;
 
   try {
     const book = await Book.findOne({ name: bookName });
