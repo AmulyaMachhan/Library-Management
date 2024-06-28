@@ -2,12 +2,12 @@ import mongoose, { Schema } from "mongoose";
 
 const transactionSchema = new Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    book: {
+    bookId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Book",
       required: true,
