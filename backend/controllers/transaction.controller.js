@@ -1,9 +1,9 @@
-import { Book } from "../models/book.model";
-import { Transaction } from "../models/transaction.model";
-import { User } from "../models/user.model";
-import { asyncHandler } from "../utils/asyncHandler";
+import { User } from "../models/user.model.js";
+import { Book } from "../models/book.model.js";
+import { Transaction } from "../models/transaction.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-const issueBook = asyncHandler(async (req, res) => {
+export const issueBook = asyncHandler(async (req, res) => {
   const { bookName, userId, issueDate } = req.body;
 
   try {
