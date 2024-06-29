@@ -97,7 +97,7 @@ export const getTransactionsByBook = asyncHandler(async (req, res) => {
       ? { currentlyIssuedTo: currentTransaction.userId.name }
       : { status: "Not issued currently" };
 
-    res.json({ totalCount, status });
+    res.status(200).json({ totalCount, status });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -114,14 +114,12 @@ export const getTotalRentByBook = asyncHandler(async (req, res) => {
       bookId: book._id,
     });
 
-    console.log(transactions);
-
     const totalRent = transactions.reduce(
       (sum, txn) => sum + (txn.rent || 0),
       0
     );
 
-    res.json({ bookName: book.name, totalRent });
+    res.status(200).json({ bookName: book.name, totalRent });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -144,7 +142,38 @@ export const getBooksRentedByUser = asyncHandler(async (req, res) => {
       returnDate: txn.returnDate,
     }));
 
-    res.json({ user: user.name, booksIssued });
+    res.status(200).json({ user: user.name, booksIssued });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+export const getBooksByDateInterval = asyncHandler(async (req, res) => {
+  const { start, end } = req.query;
+
+  if (!start || !end)
+    return res
+      .status(400)
+      .json({ message: "Start and end dates are required" });
+
+  try {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const transactions = await Transaction.find({
+      issueDate: { $gte: startDate, $lte: endDate },
+    })
+      .populate("userId")
+      .populate("bookId");
+
+    const results = transactions.map((txn) => ({
+      bookName: txn.bookId.name,
+      userName: txn.userId.name,
+      issueDate: txn.issueDate,
+      returnDate: txn.returnDate,
+    }));
+
+    res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
