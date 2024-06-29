@@ -15,6 +15,10 @@ const populateTransactions = async () => {
     console.log(
       `MONGODB CONNECTED SUCCESSFULLY !! HOST ${connectionInstance.connection.host}`
     );
+
+    await Transaction.deleteMany({});
+    console.log("Cleared existing data");
+
     // Fetch all books and users from the DB
     const books = await Book.find();
     const users = await User.find();
@@ -44,7 +48,7 @@ const populateTransactions = async () => {
         userId: randomUser._id,
         issueDate: issueDate,
         returnDate: returnDate,
-        totalRent: totalRent,
+        rent: totalRent,
       };
 
       transactions.push(newTransaction);
