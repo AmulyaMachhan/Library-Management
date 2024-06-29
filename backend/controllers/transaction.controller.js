@@ -126,3 +126,26 @@ export const getTotalRentByBook = asyncHandler(async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+export const getBooksRentedByUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    const transactions = await Transaction.find({ userId: user._id }).populate(
+      "bookId"
+    );
+
+    const booksIssued = transactions.map((txn) => ({
+      bookName: txn.bookId.name,
+      issueDate: txn.issueDate,
+      returnDate: txn.returnDate,
+    }));
+
+    res.json({ user: user.name, booksIssued });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
