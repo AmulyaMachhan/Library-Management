@@ -178,3 +178,14 @@ export const getBooksByDateInterval = asyncHandler(async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+export const getAllTransactions = asyncHandler(async (req, res) => {
+  try {
+    const transactions = await Transaction.find()
+      .populate("userId")
+      .populate("bookId");
+    res.json(transactions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
