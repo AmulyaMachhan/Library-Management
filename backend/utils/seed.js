@@ -33,6 +33,56 @@ const users = [
     email: "eve@example.com",
     membershipDate: new Date("2023-09-05"),
   },
+  {
+    name: "David Clark",
+    email: "davidclark@example.com",
+    membershipDate: new Date("2023-04-12"),
+  },
+  {
+    name: "Eva Green",
+    email: "eva@example.com",
+    membershipDate: new Date("2023-03-15"),
+  },
+  {
+    name: "George King",
+    email: "george@example.com",
+    membershipDate: new Date("2024-08-24"),
+  },
+  {
+    name: "Hannah White",
+    email: "hannah@example.com",
+    membershipDate: new Date("2017-02-18"),
+  },
+  {
+    name: "Isaac Wilson",
+    email: "isaac@example.com",
+    membershipDate: new Date("2023-05-30"),
+  },
+  {
+    name: "Jenna Foster",
+    email: "jenna@example.com",
+    membershipDate: new Date("2021-09-17"),
+  },
+  {
+    name: "Kyle Perez",
+    email: "kyle@example.com",
+    membershipDate: new Date("2016-03-15"),
+  },
+  {
+    name: "Liam Young",
+    email: "liam@example.com",
+    membershipDate: new Date("2019-01-03"),
+  },
+  {
+    name: "Mia Cooper",
+    email: "mia@example.com",
+    membershipDate: new Date("2024-11-27"),
+  },
+  {
+    name: "Noah Scott",
+    email: "noah@example.com",
+    membershipDate: new Date("2019-07-11"),
+  },
 ];
 
 const books = [
@@ -68,6 +118,20 @@ const books = [
     category: "Philosophical",
     rentPerDay: 1.9,
   },
+  { name: "The Alchemist", category: "Philosophical", rentPerDay: 7 },
+  { name: "The Shining", category: "Horror", rentPerDay: 10 },
+  { name: "The Fault in Our Stars", category: "Romance", rentPerDay: 9 },
+  { name: "Dracula", category: "Gothic Horror", rentPerDay: 8 },
+  { name: "Frankenstein", category: "Gothic Fiction", rentPerDay: 8 },
+  { name: "Gone Girl", category: "Thriller", rentPerDay: 11 },
+  {
+    name: "The Girl on the Train",
+    category: "Psychological Thriller",
+    rentPerDay: 10,
+  },
+  { name: "Sapiens", category: "Non-Fiction", rentPerDay: 12 },
+  { name: "Educated", category: "Memoir", rentPerDay: 10 },
+  { name: "Becoming", category: "Biography", rentPerDay: 9 },
 ];
 
 const seed = async () => {
@@ -78,6 +142,11 @@ const seed = async () => {
     console.log(
       `MONGODB CONNECTED SUCCESSFULLY !! HOST ${connectionInstance.connection.host}`
     );
+
+    // Clear existing data
+    await User.deleteMany({});
+    await Book.deleteMany({});
+    console.log("Cleared existing data");
 
     // Insert sample data
     await User.insertMany(users);
