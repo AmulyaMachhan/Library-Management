@@ -104,7 +104,7 @@ export const getTransactionsByBook = asyncHandler(async (req, res) => {
 });
 
 export const getTotalRentByBook = asyncHandler(async (req, res) => {
-  const { bookName } = req.params;
+  const { bookName } = req.query;
 
   try {
     const book = await Book.findOne({ name: bookName });
@@ -112,8 +112,10 @@ export const getTotalRentByBook = asyncHandler(async (req, res) => {
 
     const transactions = await Transaction.find({
       bookId: book._id,
-      rent: { $exists: true },
     });
+
+    console.log(transactions);
+
     const totalRent = transactions.reduce(
       (sum, txn) => sum + (txn.rent || 0),
       0
