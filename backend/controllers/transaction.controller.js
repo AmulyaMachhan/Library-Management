@@ -102,3 +102,25 @@ export const getTransactionsByBook = asyncHandler(async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+export const getTotalRentByBook = asyncHandler(async (req, res) => {
+  const { bookName } = req.params;
+
+  try {
+    const book = await Book.findOne({ name: bookName });
+    if (!book) return res.status(400).json({ message: "Book not found" });
+
+    const transactions = await Transaction.find({
+      bookId: book._id,
+      rent: { $exists: true },
+    });
+    const totalRent = transactions.reduce(
+      (sum, txn) => sum + (txn.rent || 0),
+      0
+    );
+
+    res.json({ bookName: book.name, totalRent });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
