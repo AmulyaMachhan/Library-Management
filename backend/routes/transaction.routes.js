@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getTotalRentByBook,
   getTransactionsByBook,
   issueBook,
   returnBook,
@@ -11,5 +12,6 @@ router.route("/issue").post(issueBook);
 router.route("/return").post(returnBook);
 
 router.route("/book").get(getTransactionsByBook);
+router.route("/book/rent").get(getTotalRentByBook);
 
 export default router;
