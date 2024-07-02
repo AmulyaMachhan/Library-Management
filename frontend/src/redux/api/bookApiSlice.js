@@ -8,7 +8,13 @@ const bookApiSlice = apiSlice.injectEndpoints({
         url: `${BOOKS_URL}/allbooks`,
       }),
     }),
+
+    getBooksByName: builder.query({
+      query: (searchTerm) => ({
+        url: `${BOOKS_URL}/search/name?query=${searchTerm}`,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllBooksQuery } = bookApiSlice;
+export const { useGetAllBooksQuery, useGetBooksByNameQuery } = bookApiSlice;
