@@ -14,6 +14,10 @@ const bookApiSlice = apiSlice.injectEndpoints({
         url: `${BOOKS_URL}/search/name?query=${searchTerm}`,
       }),
     }),
+
+    getBooksByRentRange: builder.query({
+      query: ({ min, max }) => `${BOOKS_URL}/rent?min=${min}&max=${max}`,
+    }),
   }),
 });
 
