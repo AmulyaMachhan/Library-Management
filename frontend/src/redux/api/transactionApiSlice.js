@@ -30,6 +30,11 @@ const transactionApiSlice = apiSlice.injectEndpoints({
       query: (bookName) => `${TRANSACTIONS_URL}/book/rent?bookName=${bookName}`,
       providesTags: ["Transaction"],
     }),
+
+    getBooksByUser: builder.query({
+      query: (userId) => `/transactions/user/${userId}`,
+      providesTags: ["Transaction"],
+    }),
   }),
 });
 
