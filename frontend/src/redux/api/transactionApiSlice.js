@@ -43,6 +43,11 @@ const transactionApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Transaction"],
     }),
+
+    getAllTransactions: builder.query({
+      query: () => `${TRANSACTIONS_URL}/alltransactions`,
+      providesTags: ["Transaction"],
+    }),
   }),
 });
 
