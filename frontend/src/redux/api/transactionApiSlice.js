@@ -51,5 +51,12 @@ const transactionApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useIssueBookMutation, useReturnBookMutation } =
-  transactionApiSlice;
+export const {
+  useIssueBookMutation,
+  useReturnBookMutation,
+  useGetTransactionByBookQuery,
+  useGetTotalRentByBookQuery,
+  useGetBooksByUserQuery,
+  useGetTransactionsByDateRangeQuery,
+  useGetAllTransactionsQuery,
+} = transactionApiSlice;
