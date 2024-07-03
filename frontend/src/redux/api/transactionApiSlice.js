@@ -38,7 +38,7 @@ const transactionApiSlice = apiSlice.injectEndpoints({
 
     getTransactionsByDateRange: builder.query({
       query: ({ start, end }) => ({
-        url: "/transactions/date",
+        url: `${TRANSACTIONS_URL}/date`,
         params: { start, end },
       }),
       providesTags: ["Transaction"],
