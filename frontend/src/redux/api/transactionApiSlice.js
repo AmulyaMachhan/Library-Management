@@ -25,6 +25,11 @@ const transactionApiSlice = apiSlice.injectEndpoints({
       query: (bookName) => `${TRANSACTIONS_URL}/book?bookName=${bookName}`,
       providesTags: ["Transaction"],
     }),
+
+    getTotalRentByBook: builder.query({
+      query: (bookName) => `${TRANSACTIONS_URL}/book/rent?bookName=${bookName}`,
+      providesTags: ["Transaction"],
+    }),
   }),
 });
 
