@@ -10,6 +10,14 @@ const transactionApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Transaction"],
     }),
+    returnBook: builder.mutation({
+      query: (returnData) => ({
+        url: "/transactions/return",
+        method: "POST",
+        body: returnData,
+      }),
+      invalidatesTags: ["Transaction"],
+    }),
   }),
 });
 
