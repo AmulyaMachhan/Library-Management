@@ -6,8 +6,20 @@ import "./index.css";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
 
+import { Route, RouterProvider, createRoutesFromElements } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
+
+import Home from "./components/Home/Home.jsx";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<Home />} />
+    </Route>
+  )
+);
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <App />
+    <RouterProvider router={router} />
   </Provider>
 );
