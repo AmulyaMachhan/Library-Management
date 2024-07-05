@@ -5,19 +5,19 @@ function Navbar() {
   const location = useLocation();
 
   return (
-    <aside className="w-[200px] flex flex-col">
-      <nav className="flex flex-col mt-6 space-y-3 text-sm">
+    <aside className="flex flex-col">
+      <nav className="flex flex-col mt-6 space-y-3 text-sm text-indigo-600">
         <NavLink
           to="/"
           className={({ isActive }) =>
             `flex items-center gap-2 px-5 py-2  hover:bg-gray-200 ${
-              isActive ? "text-[#6941C6]" : "text-gray-600"
+              isActive ? "text-indigo-600" : "text-gray-600"
             }`
           }
         >
           {/* Icon */}
           <div>
-            <IoGrid color={location.pathname === "/" ? "#6941C6" : "black"} />
+            <IoGrid color={location.pathname === "/" ? "#3949ab" : "black"} />
           </div>
           Overview
         </NavLink>
@@ -26,7 +26,7 @@ function Navbar() {
           to="/userlist"
           className={({ isActive }) =>
             `flex gap-2 items-center px-5 py-2 hover:bg-gray-200 ${
-              isActive ? "text-[#6941C6]" : "text-gray-600"
+              isActive ? "text-indigo-600" : "text-gray-600"
             }`
           }
         >
@@ -34,7 +34,7 @@ function Navbar() {
           <div>
             <IoGrid
               color={
-                location.pathname === "/people-directory" ? "#6941C6" : "black"
+                location.pathname === "/people-directory" ? "#3949ab" : "black"
               }
             />
           </div>
@@ -44,14 +44,14 @@ function Navbar() {
           to="/booklist"
           className={({ isActive }) =>
             `flex gap-2 items-center px-5 py-2 hover:bg-gray-200 ${
-              isActive ? "text-[#6941C6]" : "text-gray-600"
+              isActive ? "text-indigo-600" : "text-gray-600"
             }`
           }
         >
           {/* Icon */}
           <div>
             <IoGrid
-              color={location.pathname === "/booklist" ? "#6941C6" : "black"}
+              color={location.pathname === "/booklist" ? "#3949ab" : "black"}
             />
           </div>
           Books
@@ -60,7 +60,7 @@ function Navbar() {
           to="/transactionlist"
           className={({ isActive }) =>
             `flex gap-2 items-center px-5 py-2 hover:bg-gray-200 ${
-              isActive ? "text-[#6941C6]" : "text-gray-600"
+              isActive ? "text-indigo-600" : "text-gray-600"
             }`
           }
         >
@@ -68,7 +68,7 @@ function Navbar() {
           <div>
             <IoGrid
               color={
-                location.pathname === "/transactionlist" ? "#6941C6" : "black"
+                location.pathname === "/transactionlist" ? "#3949ab" : "black"
               }
             />
           </div>
