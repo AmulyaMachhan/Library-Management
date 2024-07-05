@@ -10,13 +10,15 @@ import { Route, RouterProvider, createRoutesFromElements } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./components/Home/Home.jsx";
-import UserList from "./components/User/UserList.jsx";
+import UserList from "./components/Users/UserList.jsx";
+import BookList from "./components/Books/BookList.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<Home />} />
       <Route path="/userlist" element={<UserList />} />
+      <Route path="/booklist" element={<BookList />} />
     </Route>
   )
 );
