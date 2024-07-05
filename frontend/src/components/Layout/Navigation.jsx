@@ -33,9 +33,7 @@ function Navbar() {
           {/* Icon */}
           <div>
             <IoGrid
-              color={
-                location.pathname === "/people-directory" ? "#3949ab" : "black"
-              }
+              color={location.pathname === "/userlist" ? "#3949ab" : "black"}
             />
           </div>
           Users
