@@ -39,7 +39,7 @@ function Navbar() {
           Users
         </NavLink>
         <NavLink
-          to="/booklist"
+          to="/books"
           className={({ isActive }) =>
             `flex gap-2 items-center px-5 py-2 hover:bg-gray-200 ${
               isActive ? "text-indigo-600" : "text-gray-600"
@@ -49,7 +49,7 @@ function Navbar() {
           {/* Icon */}
           <div>
             <IoGrid
-              color={location.pathname === "/booklist" ? "#3949ab" : "black"}
+              color={location.pathname === "/books" ? "#3949ab" : "black"}
             />
           </div>
           Books
