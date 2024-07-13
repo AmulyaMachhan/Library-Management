@@ -16,7 +16,7 @@ const bookApiSlice = apiSlice.injectEndpoints({
     }),
 
     getBooksByRent: builder.query({
-      query: ({ min, max }) => `${BOOKS_URL}/rent?min=${min}&max=${max}`,
+      query: ({ min, max }) => `${BOOKS_URL}/search/rent?min=${min}&max=${max}`,
     }),
 
     globalBookSearch: builder.query({
