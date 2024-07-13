@@ -50,10 +50,12 @@ const Books = () => {
     ? isLoadingName
     : isLoadingRent || isLoadingAllBooks;
 
+  const minRent = rentRange[0];
+  const maxRent = rentRange[1];
   // Handle input changes and search
   useEffect(() => {
     // Automatically triggers the useGetBooksByRentQuery whenever rentRange[0] or  changes
-  }, [rentRange[0], rentRange[1]]);
+  }, [minRent, maxRent]);
 
   const handleSearch = (e) => {
     e.preventDefault();
