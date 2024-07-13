@@ -7,22 +7,28 @@ import {
 import { Range } from "react-range";
 import Loader from "../Others/Loader";
 import BookItem from "./BookItem";
+import { useDispatch, useSelector } from "react-redux";
+import { setBooks } from "../../redux/features/bookSlice";
 
 const MIN = 0;
 const MAX = 20;
+
 const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [rentRange, setRentRange] = useState([MIN, MAX]); // Initial range state
+  const [rentRange, setRentRange] = useState([MIN, MAX]);
   const [category, setCategory] = useState("");
 
-  // If a search term is present, use the search query; otherwise, fetch all books
+  const { booksList } = useSelector((state) => state.books);
+  const dispatch = useDispatch();
+
+  // Fetch all books
   const {
     data: allBooks,
     error: allBooksError,
     isLoading: isLoadingAllBooks,
   } = useGetAllBooksQuery();
 
-  // Search by name and rent range
+  // Fetch filtered books by rent
   const {
     data: filteredBooksByRent,
     error: rentError,
@@ -32,7 +38,7 @@ const Books = () => {
     max: rentRange[1],
   });
 
-  // Search by name
+  // Fetch filtered books by name
   const {
     data: filteredBooksByName,
     error: nameError,
@@ -41,7 +47,7 @@ const Books = () => {
     skip: !searchTerm,
   });
 
-  // Combine the results
+  // Determine which books to display
   const books = searchTerm
     ? filteredBooksByName
     : filteredBooksByRent || allBooks;
@@ -50,16 +56,16 @@ const Books = () => {
     ? isLoadingName
     : isLoadingRent || isLoadingAllBooks;
 
-  const minRent = rentRange[0];
-  const maxRent = rentRange[1];
-  // Handle input changes and search
+  // Dispatch books to the global state when data is fetched
   useEffect(() => {
-    // Automatically triggers the useGetBooksByRentQuery whenever rentRange[0] or  changes
-  }, [minRent, maxRent]);
+    if (books) {
+      dispatch(setBooks(books));
+    }
+  }, [books, dispatch]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // The query is automatically handled by the useGetBooksByNameQuery hook
+    // The search query will automatically trigger the useGetBooksByNameQuery
   };
 
   if (isLoading)
@@ -68,6 +74,7 @@ const Books = () => {
         <Loader />
       </div>
     );
+
   if (error)
     return (
       <div className="flex justify-center items-center min-h-screen bg-red-100 text-red-700">
@@ -83,7 +90,7 @@ const Books = () => {
             Books List
           </h1>
           <div className="flex items-center px-3 py-1 gap-2 font-[600] text-blue-600 bg-[#edf2f8] border border-[#60aaf0] rounded-3xl">
-            <span>{books?.length} Books</span>
+            <span>{booksList?.length} Books</span>
           </div>
         </div>
         <p className="text-lg text-gray-500 text-center">
@@ -117,21 +124,14 @@ const Books = () => {
               values={rentRange}
               onChange={(values) => setRentRange(values)}
               renderTrack={({ props, children }) => (
-                <div
-                  {...props}
-                  className="w-full h-2 bg-gray-300 rounded-full"
-                  style={{
-                    background:
-                      "linear-gradient(to right, #blue 0%, #blue 100%)",
-                  }}
-                >
+                <div {...props} className="w-full h-2 bg-gray-300 rounded-full">
                   {children}
                 </div>
               )}
               renderThumb={({ props }) => (
                 <div
                   {...props}
-                  className="h-4 w-4 bg-blue-500 rounded-full shadow-md outline-none cursor-pointer "
+                  className="h-4 w-4 bg-blue-500 rounded-full shadow-md outline-none cursor-pointer"
                 />
               )}
             />
@@ -146,7 +146,6 @@ const Books = () => {
             <option value="Fiction">Fiction</option>
             <option value="Non-Fiction">Non-Fiction</option>
             <option value="Science">Science</option>
-            {/* Add more categories as needed */}
           </select>
           <button
             type="submit"
@@ -159,7 +158,7 @@ const Books = () => {
 
       {/* Books List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {books?.map((book) => (
+        {booksList?.map((book) => (
           <BookItem key={book.id} book={book} />
         ))}
       </div>
