@@ -129,7 +129,7 @@ const Books = () => {
               renderThumb={({ props }) => (
                 <div
                   {...props}
-                  className="h-4 w-4 bg-blue-500 rounded-full shadow-md outline-none cursor-pointer"
+                  className="h-4 w-4 bg-blue-500 rounded-full shadow-md outline-none cursor-pointer "
                 />
               )}
             />
