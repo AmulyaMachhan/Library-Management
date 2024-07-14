@@ -20,8 +20,12 @@ const bookApiSlice = apiSlice.injectEndpoints({
     }),
 
     globalBookSearch: builder.query({
-      query: ({ category, searchTerm, min, max }) =>
-        `${BOOKS_URL}/search/global?category=${category}&name=${searchTerm}&min=${min}&max=${max}`,
+      query: ({ searchCategory, searchTerm, minRent, maxRent }) =>
+        `${BOOKS_URL}/search/global?category=${searchCategory}&name=${searchTerm}&min=${minRent}&max=${maxRent}`,
+    }),
+
+    getCategories: builder.query({
+      query: () => `${BOOKS_URL}/categories`,
     }),
   }),
 });
@@ -31,4 +35,5 @@ export const {
   useGetBooksByNameQuery,
   useGetBooksByRentQuery,
   useGlobalBookSearchQuery,
+  useGetCategoriesQuery,
 } = bookApiSlice;
