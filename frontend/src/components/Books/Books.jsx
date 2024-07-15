@@ -19,13 +19,15 @@ const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rentRange, setRentRange] = useState([MIN, MAX]);
   const [category, setCategory] = useState("");
-  const [searchCategory, setSearchCategory] = useState(""); // Track category for manual search
+  const [searchCategory, setSearchCategory] = useState("");
 
   const { booksList } = useSelector((state) => state.books);
   const dispatch = useDispatch();
 
   const { data: categories } = useGetCategoriesQuery();
 
+  const minRent = rentRange[0];
+  const maxRent = rentRange[1];
   // Fetch all books
   const {
     data: allBooks,
@@ -57,14 +59,17 @@ const Books = () => {
     data: filteredBooksByCategory,
     error: categoryError,
     isLoading: isLoadingCategory,
-  } = useGlobalBookSearchQuery(searchCategory, {
-    skip: !searchCategory, // Skip if no category is set after button click
+  } = useGlobalBookSearchQuery({
+    searchCategory,
+    searchTerm,
+    minRent,
+    maxRent,
   });
 
   // Determine which books to display
   const books = searchTerm
     ? filteredBooksByName
-    : searchCategory
+    : category
       ? filteredBooksByCategory
       : filteredBooksByRent || allBooks;
   const error = searchTerm
