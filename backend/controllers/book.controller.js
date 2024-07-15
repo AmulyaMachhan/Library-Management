@@ -34,15 +34,25 @@ export const searchBooksByRent = asyncHandler(async (req, res) => {
 });
 
 export const globalBookSearch = asyncHandler(async (req, res) => {
-  const { category } = req.query;
-  const query = req.query.name || "abcdefghijklmnoqrstuvwxyz123456789";
-  const min = parseFloat(req.query.min) || 0;
-  const max = parseFloat(req.query.max) || Number.MAX_SAFE_INTEGER;
+  let filter = {};
+
+  if (req.query.min || req.query.max) {
+    filter.rentPerDay = {
+      $gte: req.query.min || 0,
+      $lte: req.query.max || Number.MAX_SAFE_INTEGER,
+    };
+  }
+
+  if (req.query.category) {
+    filter.category = req.query.category;
+  }
+
+  if (req.query.name) {
+    filter.name = { $regex: req.query.name, $options: "i" };
+  }
 
   try {
-    const books = await Book.find({
-      category: category,
-    });
+    const books = await Book.find(filter);
     res.status(200).json(books.sort((a, b) => a.rentPerDay - b.rentPerDay));
   } catch (error) {
     res.status(500).json({ message: error.message });
