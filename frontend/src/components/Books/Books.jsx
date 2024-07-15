@@ -3,6 +3,8 @@ import {
   useGetAllBooksQuery,
   useGetBooksByNameQuery,
   useGetBooksByRentQuery,
+  useGetCategoriesQuery,
+  useGlobalBookSearchQuery,
 } from "../../redux/api/bookApiSlice";
 import { Range } from "react-range";
 import Loader from "../Others/Loader";
@@ -17,9 +19,12 @@ const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rentRange, setRentRange] = useState([MIN, MAX]);
   const [category, setCategory] = useState("");
+  const [searchCategory, setSearchCategory] = useState(""); // Track category for manual search
 
   const { booksList } = useSelector((state) => state.books);
   const dispatch = useDispatch();
+
+  const { data: categories } = useGetCategoriesQuery();
 
   // Fetch all books
   const {
@@ -47,14 +52,27 @@ const Books = () => {
     skip: !searchTerm,
   });
 
+  // Fetch filtered books by category (only when searchCategory is set)
+  const {
+    data: filteredBooksByCategory,
+    error: categoryError,
+    isLoading: isLoadingCategory,
+  } = useGlobalBookSearchQuery(searchCategory, {
+    skip: !searchCategory, // Skip if no category is set after button click
+  });
+
   // Determine which books to display
   const books = searchTerm
     ? filteredBooksByName
-    : filteredBooksByRent || allBooks;
-  const error = searchTerm ? nameError : rentError || allBooksError;
+    : searchCategory
+      ? filteredBooksByCategory
+      : filteredBooksByRent || allBooks;
+  const error = searchTerm
+    ? nameError
+    : categoryError || rentError || allBooksError;
   const isLoading = searchTerm
     ? isLoadingName
-    : isLoadingRent || isLoadingAllBooks;
+    : isLoadingCategory || isLoadingRent || isLoadingAllBooks;
 
   // Dispatch books to the global state when data is fetched
   useEffect(() => {
@@ -65,7 +83,8 @@ const Books = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // The search query will automatically trigger the useGetBooksByNameQuery
+    // Trigger category search when the search button is clicked
+    setSearchCategory(category);
   };
 
   if (isLoading)
@@ -137,16 +156,20 @@ const Books = () => {
             />
           </div>
 
+          {/* Category Select */}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="p-2 border border-gray-300 rounded"
           >
             <option value="">Select Category</option>
-            <option value="Fiction">Fiction</option>
-            <option value="Non-Fiction">Non-Fiction</option>
-            <option value="Science">Science</option>
+            {categories?.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
+
           <button
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded"
