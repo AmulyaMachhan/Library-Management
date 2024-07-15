@@ -1,24 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import RentModal from "../Modals/RentModal";
-import { useIssueBookMutation } from "../../redux/api/transactionApiSlice";
 
 const BookItem = ({ book }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [issueBook, { isLoading, isError }] = useIssueBookMutation();
 
-  const handleRentClick = () => {
-    setIsModalOpen(true); // Open modal when "Rent Now" is clicked
+  const handleRentNowClick = () => {
+    setIsModalOpen(true);
   };
 
-  const handleRentConfirm = async () => {
-    try {
-      await issueBook({ bookId: book.id, userId: "currentUserId" }).unwrap(); // Replace "currentUserId" with actual user
-      setIsModalOpen(false); // Close modal after successful issue
-      alert("Book issued successfully!");
-    } catch (error) {
-      alert(error.message || "Failed to issue the book.");
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -51,37 +43,15 @@ const BookItem = ({ book }) => {
       {/* Action Button (Stays at Bottom) */}
       <div className="p-4 bg-gray-100 border-t mt-auto">
         <button
-          onClick={handleRentClick}
+          onClick={handleRentNowClick}
           className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition"
         >
           Rent Now
         </button>
       </div>
 
-      {/* Rent Confirmation Modal */}
-      {isModalOpen && (
-        <RentModal onClose={() => setIsModalOpen(false)}>
-          <h3 className="text-lg font-semibold mb-4">Rent Book: {book.name}</h3>
-          <p>Are you sure you want to rent this book?</p>
-          <div className="mt-6 flex justify-end space-x-4">
-            <button
-              onClick={handleRentConfirm}
-              className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-            >
-              {isLoading ? "Renting..." : "Confirm Rent"}
-            </button>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700"
-            >
-              Cancel
-            </button>
-          </div>
-          {isError && (
-            <p className="text-red-600 mt-4">Failed to issue the book.</p>
-          )}
-        </RentModal>
-      )}
+      {/* Rent Modal */}
+      {isModalOpen && <RentModal book={book} onClose={handleCloseModal} />}
     </div>
   );
 };
