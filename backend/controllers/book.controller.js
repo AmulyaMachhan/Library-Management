@@ -49,3 +49,12 @@ export const globalBookSearch = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+export const getAllCategories = asyncHandler(async (req, res) => {
+  try {
+    const categories = await Book.distinct("category");
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
