@@ -48,6 +48,11 @@ const transactionApiSlice = apiSlice.injectEndpoints({
       query: () => `${TRANSACTIONS_URL}/alltransactions`,
       providesTags: ["Transaction"],
     }),
+
+    getUsersWithIssuedBook: builder.query({
+      query: ({ bookName }) =>
+        `${TRANSACTIONS_URL}/users/book?bookName=${bookName}`,
+    }),
   }),
 });
 
@@ -59,4 +64,5 @@ export const {
   useGetBooksByUserQuery,
   useGetTransactionsByDateRangeQuery,
   useGetAllTransactionsQuery,
+  useGetUsersWithIssuedBookQuery,
 } = transactionApiSlice;
