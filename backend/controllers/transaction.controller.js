@@ -189,3 +189,34 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+export const getUsersWithIssuedBook = asyncHandler(async (req, res) => {
+  const { bookName } = req.query;
+
+  try {
+    const book = await Book.findOne({ name: bookName });
+    if (!book) return res.status(400).json({ message: "Book not found" });
+
+    const transactions = await Transaction.find({
+      bookId: book._id,
+      returnDate: null,
+    }).populate("userId");
+
+    const usersWithIssuedBook = transactions.map((txn) => ({
+      userId: txn.userId._id,
+      userName: txn.userId.name,
+      issueDate: txn.issueDate,
+    }));
+
+    if (usersWithIssuedBook.length === 0) {
+      return res
+        .status(200)
+        .json({ message: "No users currently have this book issued." });
+    }
+
+    // Return the list of users who have the book issued and not yet returned
+    res.status(200).json(usersWithIssuedBook);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
