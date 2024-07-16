@@ -14,7 +14,19 @@ const Transactions = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">All Transactions</h1>
+      <div className="mb-6">
+        <div className="flex justify-center items-center gap-4">
+          <h1 className="text-4xl font-extrabold text-gray-800 text-center">
+            Total Transactions
+          </h1>
+          <div className="flex items-center px-3 py-1 gap-2 font-[600] text-blue-600 bg-[#edf2f8] border border-[#60aaf0] rounded-3xl">
+            <span>{transactions?.length}</span>
+          </div>
+        </div>
+        <p className="text-lg text-gray-500 text-center">
+          Explore and manage your Books below.
+        </p>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
