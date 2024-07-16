@@ -4,6 +4,7 @@ import {
   useGetUsersWithIssuedBookQuery,
   useReturnBookMutation,
 } from "../../redux/api/transactionApiSlice";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const ReturnModal = ({ book, onClose }) => {
   const [returnBook, { isLoading, error }] = useReturnBookMutation();
@@ -31,7 +32,15 @@ const ReturnModal = ({ book, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Return Book</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Return Book</h2>
+          <button
+            onClick={onClose}
+            className="text-red-500 hover:text-gray-800 mb-1"
+          >
+            <IoIosCloseCircleOutline size={22} />
+          </button>
+        </div>
 
         <div className="mb-4">
           {isFetching ? (
