@@ -5,6 +5,7 @@ import {
   getBooksRentedByUser,
   getTotalRentByBook,
   getTransactionsByBook,
+  getUsersWithIssuedBook,
   issueBook,
   returnBook,
 } from "../controllers/transaction.controller.js";
@@ -18,6 +19,7 @@ router.route("/book").get(getTransactionsByBook);
 router.route("/book/rent").get(getTotalRentByBook);
 
 router.route("/user/:userId").get(getBooksRentedByUser);
+router.route("/users/book").get(getUsersWithIssuedBook);
 
 router.route("/date").get(getBooksByDateInterval);
 
