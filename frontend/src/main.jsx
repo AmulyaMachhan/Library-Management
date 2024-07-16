@@ -12,6 +12,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./components/Home/Home.jsx";
 import Users from "./components/Users/Users.jsx";
 import Books from "./components/Books/Books.jsx";
+import Transactions from "./components/Transactions/Transactions.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<Home />} />
       <Route path="/users" element={<Users />} />
       <Route path="/books" element={<Books />} />
+      <Route path="/transactions" element={<Transactions />} />
     </Route>
   )
 );
