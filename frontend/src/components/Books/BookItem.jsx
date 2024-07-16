@@ -1,17 +1,19 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import RentModal from "../Modals/RentModal";
+import ReturnModal from "../Modals/ReturnModal";
 
 const BookItem = ({ book }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRentModalOpen, setIsRentModalOpen] = useState(false);
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
 
-  const handleRentNowClick = () => {
-    setIsModalOpen(true);
-  };
+  // Handle opening and closing the Rent Modal
+  const handleRentNowClick = () => setIsRentModalOpen(true);
+  const handleCloseRentModal = () => setIsRentModalOpen(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // Handle opening and closing the Return Modal
+  const handleReturnClick = () => setIsReturnModalOpen(true);
+  const handleCloseReturnModal = () => setIsReturnModalOpen(false);
 
   return (
     <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl h-full">
@@ -40,18 +42,34 @@ const BookItem = ({ book }) => {
         </div>
       </div>
 
-      {/* Action Button (Stays at Bottom) */}
-      <div className="p-4 bg-gray-100 border-t mt-auto">
+      {/* Action Buttons (Rent & Return) */}
+      <div className="p-4 bg-gray-100 border-t mt-auto flex flex-col gap-2">
+        {/* Rent Now Button */}
         <button
           onClick={handleRentNowClick}
           className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition"
         >
           Rent Now
         </button>
+
+        {/* Return Book Button */}
+        <button
+          onClick={handleReturnClick}
+          className="w-full bg-red-200 text-red-700 py-2 rounded-lg font-semibold shadow-md hover:bg-red-100 transition"
+        >
+          Return Book
+        </button>
       </div>
 
       {/* Rent Modal */}
-      {isModalOpen && <RentModal book={book} onClose={handleCloseModal} />}
+      {isRentModalOpen && (
+        <RentModal book={book} onClose={handleCloseRentModal} />
+      )}
+
+      {/* Return Modal */}
+      {isReturnModalOpen && (
+        <ReturnModal book={book} onClose={handleCloseReturnModal} />
+      )}
     </div>
   );
 };
