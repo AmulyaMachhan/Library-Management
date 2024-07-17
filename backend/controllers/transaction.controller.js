@@ -166,12 +166,29 @@ export const getBooksByDateInterval = asyncHandler(async (req, res) => {
       .populate("userId")
       .populate("bookId");
 
-    const results = transactions.map((txn) => ({
-      bookId: txn.bookId,
-      userId: txn.userId,
-      issueDate: txn.issueDate,
-      returnDate: txn.returnDate,
-    }));
+    // Calculate rent for each transaction
+    const results = transactions.map((txn) => {
+      const issueDate = new Date(txn.issueDate);
+      const returnDate = txn.returnDate ? new Date(txn.returnDate) : new Date();
+
+      // Ensure returnDate is within the specified interval
+      const validReturnDate = returnDate > endDate ? endDate : returnDate;
+
+      // Calculate number of days the book was issued
+      const diffTime = Math.abs(validReturnDate - issueDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      // Calculate rent based on rentPerDay of the book
+      const rent = diffDays * txn.bookId.rentPerDay;
+
+      return {
+        bookId: txn.bookId,
+        userId: txn.userId,
+        issueDate: txn.issueDate,
+        returnDate: txn.returnDate,
+        rent,
+      };
+    });
 
     res.status(200).json(results);
   } catch (err) {
