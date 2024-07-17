@@ -10,8 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 const Transactions = () => {
   const { transactionsList } = useSelector((state) => state.transactions);
 
-  console.log(transactionsList);
-
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [fetchData, setFetchData] = useState(false);
@@ -24,7 +22,6 @@ const Transactions = () => {
     isLoading: istransactionsLoading,
   } = useGetAllTransactionsQuery();
 
-  // Use the API query with date range parameters
   const {
     data: filteredTransactions,
     error: filteredTransactionsError,
@@ -32,9 +29,23 @@ const Transactions = () => {
   } = useGetTransactionsByDateRangeQuery(
     { start: startDate, end: endDate },
     {
-      skip: !fetchData, // Skip fetching data if fetchData is false
+      skip: !fetchData,
     }
   );
+
+  const handleFetchTransactions = () => {
+    if (startDate && endDate) {
+      setFetchData(true);
+    } else {
+      setFetchData(false);
+    }
+  };
+
+  const handleClearFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setFetchData(false);
+  };
 
   const transactions = fetchData ? filteredTransactions : alltransactions;
   const error = fetchData ? filteredTransactionsError : transactionError;
@@ -42,20 +53,11 @@ const Transactions = () => {
     ? isFilteredTransactionLoading
     : istransactionsLoading;
 
-  const handleFetchTransactions = () => {
-    if (startDate && endDate) {
-      setFetchData(true);
-    } else {
-      setFetchData(false);
-      alert("Please select both start and end dates.");
-    }
-  };
-
   useEffect(() => {
     if (transactions) {
       dispatch(setTransactions(transactions));
     }
-  }, [transactions, dispatch]);
+  }, [transactions, dispatch, fetchData]);
 
   if (isLoading) {
     return (
@@ -89,7 +91,7 @@ const Transactions = () => {
         </p>
       </div>
       <div className="mb-6">
-        <div className="flex gap-4">
+        <div className="flex gap-4 mb-4">
           <input
             type="date"
             value={startDate}
@@ -107,6 +109,12 @@ const Transactions = () => {
             className="px-4 py-2 bg-blue-600 text-white rounded"
           >
             Fetch Transactions
+          </button>
+          <button
+            onClick={handleClearFilters}
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded"
+          >
+            Clear Filters
           </button>
         </div>
       </div>
