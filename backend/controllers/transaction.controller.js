@@ -167,8 +167,8 @@ export const getBooksByDateInterval = asyncHandler(async (req, res) => {
       .populate("bookId");
 
     const results = transactions.map((txn) => ({
-      bookName: txn.bookId.name,
-      userName: txn.userId.name,
+      bookId: txn.bookId,
+      userId: txn.userId,
       issueDate: txn.issueDate,
       returnDate: txn.returnDate,
     }));
