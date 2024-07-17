@@ -1,11 +1,16 @@
 import { useGetAllTransactionsQuery } from "../../redux/api/transactionApiSlice";
+import Loader from "../Others/Loader";
 
 const Transactions = () => {
   // Use the Redux hook to fetch transactions
   const { data: transactions, error, isLoading } = useGetAllTransactionsQuery();
 
   if (isLoading) {
-    return <div>Loading transactions...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <Loader />
+      </div>
+    );
   }
 
   if (error) {
