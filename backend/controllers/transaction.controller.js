@@ -184,7 +184,7 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
     const transactions = await Transaction.find()
       .populate("userId")
       .populate("bookId");
-    res.json(transactions);
+    res.json(transactions?.sort((a, b) => b.returnDate - a.returnDate));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
