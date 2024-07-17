@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetAllTransactionsQuery,
   useGetTransactionsByDateRangeQuery,
 } from "../../redux/api/transactionApiSlice";
 import Loader from "../Others/Loader";
+import { setTransactions } from "../../redux/features/transactionSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const TransactionsByDateRange = () => {
+const Transactions = () => {
+  const { transactionList } = useSelector((state) => state.transactions);
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [fetchData, setFetchData] = useState(false);
+
+  const dispatch = useDispatch();
 
   const {
     data: alltransactions,
@@ -42,6 +48,12 @@ const TransactionsByDateRange = () => {
     }
   };
 
+  useEffect(() => {
+    if (transactions) {
+      dispatch(setTransactions(transactions));
+    }
+  }, [transactions, dispatch]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -66,7 +78,7 @@ const TransactionsByDateRange = () => {
             Total Transactions
           </h1>
           <div className="flex items-center px-3 py-1 gap-2 font-[600] text-blue-600 bg-[#edf2f8] border border-[#60aaf0] rounded-3xl">
-            <span>{transactions?.length}</span>
+            <span>{transactionList?.length}</span>
           </div>
         </div>
         <p className="text-lg text-gray-500 text-center">
@@ -95,39 +107,63 @@ const TransactionsByDateRange = () => {
           </button>
         </div>
       </div>
-
-      {fetchData && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200">
-            <thead>
+      <div className="overflow-x-auto">
+        <div className="bg-white shadow-md rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="px-4 py-2 border">Book Name</th>
-                <th className="px-4 py-2 border">User Name</th>
-                <th className="px-4 py-2 border">Issue Date</th>
-                <th className="px-4 py-2 border">Return Date</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium">
+                  Book
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium">
+                  Issue Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium">
+                  Return Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium">
+                  Rent
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {transactions?.map((transaction, index) => (
-                <tr key={index}>
-                  <td className="px-4 py-2 border">{transaction.bookName}</td>
-                  <td className="px-4 py-2 border">{transaction.userName}</td>
-                  <td className="px-4 py-2 border">
+            <tbody className="bg-white divide-y divide-gray-200">
+              {transactions?.map((transaction) => (
+                <tr
+                  key={transaction._id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {transaction.userId
+                      ? transaction.userId.name
+                      : "Unknown User"}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {transaction.bookId
+                      ? transaction.bookId.name
+                      : "Unknown Book"}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
                     {new Date(transaction.issueDate).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-6 py-4 text-sm text-gray-700">
                     {transaction.returnDate
                       ? new Date(transaction.returnDate).toLocaleDateString()
                       : "Not Returned"}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    ${transaction.rent?.toFixed(2) || 0}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-export default TransactionsByDateRange;
+export default Transactions;
