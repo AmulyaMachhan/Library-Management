@@ -14,7 +14,11 @@ const Transactions = () => {
   }
 
   if (error) {
-    return <div>Error fetching transactions</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-red-100 text-red-700">
+        <p className="text-lg font-semibold">Error fetching Transactions.</p>
+      </div>
+    );
   }
 
   return (
