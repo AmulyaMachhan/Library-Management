@@ -8,7 +8,9 @@ import { setTransactions } from "../../redux/features/transactionSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Transactions = () => {
-  const { transactionList } = useSelector((state) => state.transactions);
+  const { transactionsList } = useSelector((state) => state.transactions);
+
+  console.log(transactionsList);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -44,6 +46,7 @@ const Transactions = () => {
     if (startDate && endDate) {
       setFetchData(true);
     } else {
+      setFetchData(false);
       alert("Please select both start and end dates.");
     }
   };
@@ -78,7 +81,7 @@ const Transactions = () => {
             Total Transactions
           </h1>
           <div className="flex items-center px-3 py-1 gap-2 font-[600] text-blue-600 bg-[#edf2f8] border border-[#60aaf0] rounded-3xl">
-            <span>{transactionList?.length}</span>
+            <span>{transactionsList?.length}</span>
           </div>
         </div>
         <p className="text-lg text-gray-500 text-center">
@@ -130,7 +133,7 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {transactions?.map((transaction) => (
+              {transactionsList?.map((transaction) => (
                 <tr
                   key={transaction._id}
                   className="hover:bg-gray-50 transition-colors"
