@@ -30,10 +30,10 @@ const BooksRentedByUser = ({ userId, onClose }) => {
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-xl font-semibold mb-4">Books Rented</h2>
       <ul>
-        {books && books.length > 0 ? (
-          books.map((book) => (
-            <li key={book._id} className="py-2">
-              {book.title}
+        {books && books.booksIssued.length > 0 ? (
+          books.booksIssued.map((book, index) => (
+            <li key={index} className="py-2">
+              {book.bookName}
             </li>
           ))
         ) : (
