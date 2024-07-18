@@ -6,8 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api/": "http://localhost:8000",
-      "/uploads/": "http://localhost:8000",
+      "/api/": "https://library-management-nu-seven.vercel.app/",
     },
   },
 });
