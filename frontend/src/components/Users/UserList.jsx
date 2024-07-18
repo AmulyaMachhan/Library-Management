@@ -9,11 +9,13 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import BooksRentedByUser from "./BooksRentedByUser"; // Import the new component
 
 const UserList = ({ users }) => {
   const [sorting, setSorting] = useState([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [filtering, setFiltering] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   // Memoized table data and columns
   const data = useMemo(() => users, [users]);
@@ -21,16 +23,28 @@ const UserList = ({ users }) => {
     () => [
       {
         header: "Name",
-        accessorKey: "name", // key in the user object
+        accessorKey: "name",
       },
       {
         header: "Email",
-        accessorKey: "email", // key in the user object
+        accessorKey: "email",
       },
       {
         header: "Membership Date",
-        accessorKey: "membershipDate", // key in the user object
-        cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // format date
+        accessorKey: "membershipDate",
+        cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(),
+      },
+      {
+        header: "Books Rented",
+        id: "booksRented",
+        cell: ({ row }) => (
+          <button
+            onClick={() => setSelectedUserId(row.original._id)}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            View Books
+          </button>
+        ),
       },
     ],
     []
@@ -172,6 +186,14 @@ const UserList = ({ users }) => {
           </select>
         </div>
       </div>
+
+      {/* Books Rented By User Modal */}
+      {selectedUserId && (
+        <BooksRentedByUser
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
+      )}
     </div>
   );
 };
