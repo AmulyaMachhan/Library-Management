@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetUsersWithIssuedBookQuery,
   useReturnBookMutation,
@@ -10,7 +10,11 @@ const ReturnModal = ({ book, onClose }) => {
   const [returnBook, { isLoading, error }] = useReturnBookMutation();
   const [selectedUserId, setSelectedUserId] = useState("");
 
-  const { data: users, isFetching } = useGetUsersWithIssuedBookQuery({
+  const {
+    data: users,
+    isFetching,
+    refetch,
+  } = useGetUsersWithIssuedBookQuery({
     bookName: book.name,
   });
 
@@ -26,6 +30,10 @@ const ReturnModal = ({ book, onClose }) => {
       console.error("Error returning book:", error);
     }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const isDisabled = isLoading || !users?.length || !selectedUserId;
 
