@@ -32,8 +32,7 @@ const transactionApiSlice = apiSlice.injectEndpoints({
     }),
 
     getBooksByUser: builder.query({
-      query: (userId) => `/transactions/user/${userId}`,
-      providesTags: ["Transaction"],
+      query: ({ userId }) => `/transactions/user/${userId}`,
     }),
 
     getTransactionsByDateRange: builder.query({
