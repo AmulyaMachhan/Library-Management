@@ -27,8 +27,6 @@ const RentModal = ({ book, onClose }) => {
       toast.success("Book successfully rented!");
       onClose();
     } catch (error) {
-      console.log(error);
-
       toast.error(error.data.message || "Failed to rent the book.");
     }
   };
