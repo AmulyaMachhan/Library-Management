@@ -20,10 +20,9 @@ const BookTransactionsModal = ({
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  console.log(transactions);
   const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-5xl p-6 relative">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative">
         {/* Modal Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">
@@ -37,6 +36,22 @@ const BookTransactionsModal = ({
           </button>
         </div>
 
+        {/* Book Status */}
+        <div className="mb-4">
+          <p className="text-lg font-semibold">
+            Status:{" "}
+            <span
+              className={`${
+                transactions?.status?.type === "Not issued currently"
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
+            >
+              {transactions?.status?.type}
+            </span>
+          </p>
+        </div>
+
         {/* Modal Content */}
         {isFetching && <p className="text-center">Loading transactions...</p>}
         {isError && (
@@ -47,38 +62,40 @@ const BookTransactionsModal = ({
         {!isFetching &&
         !isError &&
         transactions &&
-        transactions.txn?.length > 0 ? (
+        transactions?.txn?.length > 0 ? (
           <div className="max-h-80 overflow-y-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="px-4 py-2">Transaction ID</th>
-                  <th className="px-4 py-2">User Name</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Issue Date</th>
-                  <th className="px-4 py-2">Return Date</th>
-                  <th className="px-4 py-2">Rent</th>
+                  <th className="px-4 py-2">User</th>
+                  <th className="px-4 py-2 md:table-cell hidden">Email</th>
+                  <th className="px-4 py-2">ReturnDate</th>
+                  <th className="px-4 py-2 md:table-cell hidden">Rent</th>
+                  <th className="px-4 py-2 md:table-cell hidden">Issue Date</th>
+                  <th className="px-4 py-2 md:table-cell hidden">Type</th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.txn.map((transaction) => (
+                {transactions?.txn.map((transaction) => (
                   <tr key={transaction._id} className="hover:bg-gray-50">
-                    <td className="border-t px-4 py-2">{transaction._id}</td>
                     <td className="border-t px-4 py-2">
                       {transaction.userId.name}
                     </td>
-                    <td className="border-t px-4 py-2">
+                    <td className="border-t px-4 py-2 md:table-cell hidden">
                       {transaction.userId.email}
                     </td>
                     <td className="border-t px-4 py-2">
+                      {new Date(transaction.returnDate).toLocaleDateString()}
+                    </td>
+                    <td className="border-t px-4 py-2 md:table-cell hidden">
+                      {transaction.rent.toFixed(2)}
+                    </td>
+                    <td className="border-t px-4 py-2 md:table-cell hidden">
                       {new Date(transaction.issueDate).toLocaleDateString()}
                     </td>
-                    <td className="border-t px-4 py-2">
-                      {transaction.returnDate
-                        ? new Date(transaction.returnDate).toLocaleDateString()
-                        : "Not returned"}
+                    <td className="border-t px-4 py-2 md:table-cell hidden">
+                      {transaction.returnDate ? "Returned" : "Rented"}
                     </td>
-                    <td className="border-t px-4 py-2">{transaction.rent}</td>
                   </tr>
                 ))}
               </tbody>
@@ -109,6 +126,10 @@ BookTransactionsModal.propTypes = {
     name: PropTypes.string.isRequired,
   }).isRequired,
   transactions: PropTypes.shape({
+    totalCount: PropTypes.number.isRequired,
+    status: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+    }),
     txn: PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string.isRequired,
@@ -118,7 +139,7 @@ BookTransactionsModal.propTypes = {
         }).isRequired,
         issueDate: PropTypes.string.isRequired,
         returnDate: PropTypes.string,
-        rent: PropTypes.number.isRequired,
+        rent: PropTypes.number,
       })
     ),
   }),
