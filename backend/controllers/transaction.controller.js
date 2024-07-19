@@ -95,9 +95,9 @@ export const getTransactionsByBook = asyncHandler(async (req, res) => {
     const currentTransaction = transactions.find((t) => !t.returnDate);
     const status = currentTransaction
       ? { currentlyIssuedTo: currentTransaction.userId.name }
-      : { status: "Not issued currently" };
+      : { type: "Not issued currently" };
 
-    res.status(200).json({ totalCount, status });
+    res.status(200).json({ totalCount, status, txn: transactions });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
