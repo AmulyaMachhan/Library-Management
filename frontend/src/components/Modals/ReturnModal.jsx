@@ -1,10 +1,10 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {
   useGetUsersWithIssuedBookQuery,
   useReturnBookMutation,
 } from "../../redux/api/transactionApiSlice";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { createPortal } from "react-dom";
 
 const ReturnModal = ({ book, onClose }) => {
   const [returnBook, { isLoading, error }] = useReturnBookMutation();
@@ -37,7 +37,8 @@ const ReturnModal = ({ book, onClose }) => {
 
   const isDisabled = isLoading || !users?.length || !selectedUserId;
 
-  return (
+  // Modal content
+  const modalContent = (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
@@ -108,6 +109,9 @@ const ReturnModal = ({ book, onClose }) => {
       </div>
     </div>
   );
+
+  // Use createPortal to render modal content at the root level
+  return createPortal(modalContent, document.body);
 };
 
 export default ReturnModal;
