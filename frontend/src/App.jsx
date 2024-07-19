@@ -9,7 +9,7 @@ function App() {
     <>
       <ToastContainer />
       <Header />
-      <main className="h-full flex">
+      <main className="h-full flex flex-col md:flex-row">
         <Navigation />
         <div className="mx-4 mt-6 flex-1 rounded-xl shadow-lg border-t-2 border-t-gray-200">
           <Outlet />
