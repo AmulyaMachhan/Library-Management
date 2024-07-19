@@ -7,7 +7,7 @@ const BooksRentedByUser = ({ userId, onClose }) => {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60">
         <Loader />
       </div>
     );
@@ -15,12 +15,14 @@ const BooksRentedByUser = ({ userId, onClose }) => {
 
   if (error) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <p className="text-red-600">Error fetching books rented by user.</p>
+      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center space-y-4">
+          <p className="text-red-500 font-semibold text-lg">
+            Error fetching books rented by user.
+          </p>
           <button
             onClick={onClose}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg"
+            className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-300 ease-in-out"
           >
             Close
           </button>
@@ -30,26 +32,35 @@ const BooksRentedByUser = ({ userId, onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">Books Rented</h2>
-        <ul>
-          {books?.booksIssued?.length > 0 ? (
-            books.booksIssued.map((book, index) => (
-              <li key={index} className="py-2">
-                {book.bookName}
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60">
+      <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          Books Rented
+        </h2>
+        {books?.booksIssued?.length > 0 ? (
+          <ul className="divide-y divide-gray-200">
+            {books.booksIssued.map((book, index) => (
+              <li
+                key={index}
+                className="py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 rounded-lg px-4 transition duration-200 ease-in-out"
+              >
+                <span className="text-gray-700 font-medium">
+                  {book.bookName}
+                </span>
               </li>
-            ))
-          ) : (
-            <p>No books rented.</p>
-          )}
-        </ul>
-        <button
-          onClick={onClose}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
-        >
-          Close
-        </button>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center text-gray-600">No books rented.</p>
+        )}
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-purple-700 transition duration-300 ease-in-out"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -59,4 +70,5 @@ BooksRentedByUser.propTypes = {
   userId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
 export default BooksRentedByUser;
