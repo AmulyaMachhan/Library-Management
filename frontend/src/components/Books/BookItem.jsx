@@ -1,11 +1,19 @@
-/* eslint-disable react/prop-types */
+import PropTypes from "prop-types";
 import { useState } from "react";
 import RentModal from "../Modals/RentModal";
-import ReturnModal from "../Modals/ReturnModal";
+import ReturnModal from "../Modals/ReturnModal"; // Assuming your API slice
+import { useLazyGetTransactionByBookQuery } from "../../redux/api/transactionApiSlice";
 
 const BookItem = ({ book }) => {
   const [isRentModalOpen, setIsRentModalOpen] = useState(false);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [isTransactionDropdownOpen, setIsTransactionDropdownOpen] =
+    useState(false);
+  const [transactionsData, setTransactionsData] = useState(null);
+
+  // Lazy query to fetch transaction details for a book
+  const [triggerGetTransactions, { isFetching, isError }] =
+    useLazyGetTransactionByBookQuery();
 
   // Handle opening and closing the Rent Modal
   const handleRentNowClick = () => setIsRentModalOpen(true);
@@ -14,6 +22,18 @@ const BookItem = ({ book }) => {
   // Handle opening and closing the Return Modal
   const handleReturnClick = () => setIsReturnModalOpen(true);
   const handleCloseReturnModal = () => setIsReturnModalOpen(false);
+
+  // Handle Transaction Dropdown Toggle
+  const handleTransactionDropdownClick = async () => {
+    setIsTransactionDropdownOpen(!isTransactionDropdownOpen);
+
+    if (!isTransactionDropdownOpen) {
+      const result = await triggerGetTransactions(book.name);
+      if (result?.data) {
+        setTransactionsData(result.data);
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl h-full">
@@ -42,7 +62,7 @@ const BookItem = ({ book }) => {
         </div>
       </div>
 
-      {/* Action Buttons (Rent & Return) */}
+      {/* Action Buttons (Rent, Return & Transactions) */}
       <div className="p-4 bg-gray-100 border-t mt-auto flex flex-col gap-2">
         {/* Rent Now Button */}
         <button
@@ -59,6 +79,34 @@ const BookItem = ({ book }) => {
         >
           Return Book
         </button>
+
+        {/* Show Transactions Button */}
+        <button
+          onClick={handleTransactionDropdownClick}
+          className="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-300 transition"
+        >
+          {isFetching ? "Loading..." : "Show Transactions"}
+        </button>
+
+        {/* Dropdown for Transactions */}
+        {isTransactionDropdownOpen && (
+          <div className="bg-white border mt-2 p-4 rounded-lg shadow-lg">
+            {isError ? (
+              <p className="text-red-500">Failed to load transactions</p>
+            ) : (
+              <>
+                <p className="font-semibold">
+                  Total Transactions: {transactionsData?.totalCount || 0}
+                </p>
+                <p className="font-semibold">
+                  Status:{" "}
+                  {transactionsData?.status?.currentlyIssuedTo ||
+                    transactionsData?.status?.status}
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Rent Modal */}
@@ -74,4 +122,11 @@ const BookItem = ({ book }) => {
   );
 };
 
+BookItem.propTypes = {
+  book: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    rentPerDay: PropTypes.number.isRequired,
+  }).isRequired,
+};
 export default BookItem;
