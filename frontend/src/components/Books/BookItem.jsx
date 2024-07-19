@@ -3,8 +3,9 @@ import { useState } from "react";
 import RentModal from "../Modals/RentModal";
 import ReturnModal from "../Modals/ReturnModal";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import TransactionsModal from "../Modals/Transactions";
+
 import { useLazyGetTransactionByBookQuery } from "../../redux/api/transactionApiSlice";
+import BookTransactionsModal from "../Modals/BookTransactionsModal";
 
 const BookItem = ({ book }) => {
   const [isRentModalOpen, setIsRentModalOpen] = useState(false);
@@ -120,7 +121,7 @@ const BookItem = ({ book }) => {
 
       {/* Transactions Modal */}
       {isTransactionModalOpen && (
-        <TransactionsModal
+        <BookTransactionsModal
           book={book}
           transactions={transactionsData}
           onClose={handleCloseTransactionModal}

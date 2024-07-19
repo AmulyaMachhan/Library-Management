@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 
-const TransactionsModal = ({
+const BookTransactionsModal = ({
   book,
   transactions,
   onClose,
@@ -88,7 +88,7 @@ const TransactionsModal = ({
   );
 };
 
-TransactionsModal.propTypes = {
+BookTransactionsModal.propTypes = {
   book: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }).isRequired,
@@ -107,4 +107,4 @@ TransactionsModal.propTypes = {
   isError: PropTypes.bool.isRequired,
 };
 
-export default TransactionsModal;
+export default BookTransactionsModal;
