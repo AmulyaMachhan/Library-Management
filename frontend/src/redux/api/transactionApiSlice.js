@@ -58,6 +58,7 @@ export const {
   useIssueBookMutation,
   useReturnBookMutation,
   useGetTransactionByBookQuery,
+  useLazyGetTransactionByBookQuery,
   useGetTotalRentByBookQuery,
   useGetBooksByUserQuery,
   useGetTransactionsByDateRangeQuery,
