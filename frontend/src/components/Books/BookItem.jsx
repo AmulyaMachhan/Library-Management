@@ -1,42 +1,69 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import RentModal from "../Modals/RentModal";
-import ReturnModal from "../Modals/ReturnModal"; // Assuming your API slice
+import ReturnModal from "../Modals/ReturnModal";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import TransactionsModal from "../Modals/Transactions";
 import { useLazyGetTransactionByBookQuery } from "../../redux/api/transactionApiSlice";
 
 const BookItem = ({ book }) => {
   const [isRentModalOpen, setIsRentModalOpen] = useState(false);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
-  const [isTransactionDropdownOpen, setIsTransactionDropdownOpen] =
-    useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
   const [transactionsData, setTransactionsData] = useState(null);
 
-  // Lazy query to fetch transaction details for a book
   const [triggerGetTransactions, { isFetching, isError }] =
     useLazyGetTransactionByBookQuery();
 
-  // Handle opening and closing the Rent Modal
+  // Handle Rent Modal
   const handleRentNowClick = () => setIsRentModalOpen(true);
   const handleCloseRentModal = () => setIsRentModalOpen(false);
 
-  // Handle opening and closing the Return Modal
+  // Handle Return Modal
   const handleReturnClick = () => setIsReturnModalOpen(true);
   const handleCloseReturnModal = () => setIsReturnModalOpen(false);
 
-  // Handle Transaction Dropdown Toggle
-  const handleTransactionDropdownClick = async () => {
-    setIsTransactionDropdownOpen(!isTransactionDropdownOpen);
+  // Toggle Dropdown
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-    if (!isTransactionDropdownOpen) {
-      const result = await triggerGetTransactions(book.name);
-      if (result?.data) {
-        setTransactionsData(result.data);
-      }
+  // Handle Show Transactions (Dropdown Option)
+  const handleShowTransactionsClick = async () => {
+    setIsTransactionModalOpen(true);
+    setIsDropdownOpen(false); // Close the dropdown
+
+    const result = await triggerGetTransactions(book.name);
+    if (result?.data) {
+      setTransactionsData(result.data);
     }
   };
 
+  // Handle Close Transaction Modal
+  const handleCloseTransactionModal = () => setIsTransactionModalOpen(false);
+
   return (
-    <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl h-full">
+    <div className="relative flex flex-col bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl h-full">
+      {/* Dropdown Button (Top Right) */}
+      <div className="absolute top-5 right-2">
+        <button
+          onClick={toggleDropdown}
+          className="text-white hover:text-gray-700 focus:outline-none"
+        >
+          <BsThreeDotsVertical size={22} />
+        </button>
+
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg">
+            <button
+              onClick={handleShowTransactionsClick}
+              className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+            >
+              Show Transactions
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Book Image */}
       <div className="h-24 bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
         <p className="text-white font-bold text-2xl uppercase">
@@ -62,7 +89,7 @@ const BookItem = ({ book }) => {
         </div>
       </div>
 
-      {/* Action Buttons (Rent, Return & Transactions) */}
+      {/* Action Buttons (Rent & Return) */}
       <div className="p-4 bg-gray-100 border-t mt-auto flex flex-col gap-2">
         {/* Rent Now Button */}
         <button
@@ -79,34 +106,6 @@ const BookItem = ({ book }) => {
         >
           Return Book
         </button>
-
-        {/* Show Transactions Button */}
-        <button
-          onClick={handleTransactionDropdownClick}
-          className="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-300 transition"
-        >
-          {isFetching ? "Loading..." : "Show Transactions"}
-        </button>
-
-        {/* Dropdown for Transactions */}
-        {isTransactionDropdownOpen && (
-          <div className="bg-white border mt-2 p-4 rounded-lg shadow-lg">
-            {isError ? (
-              <p className="text-red-500">Failed to load transactions</p>
-            ) : (
-              <>
-                <p className="font-semibold">
-                  Total Transactions: {transactionsData?.totalCount || 0}
-                </p>
-                <p className="font-semibold">
-                  Status:{" "}
-                  {transactionsData?.status?.currentlyIssuedTo ||
-                    transactionsData?.status?.status}
-                </p>
-              </>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Rent Modal */}
@@ -117,6 +116,17 @@ const BookItem = ({ book }) => {
       {/* Return Modal */}
       {isReturnModalOpen && (
         <ReturnModal book={book} onClose={handleCloseReturnModal} />
+      )}
+
+      {/* Transactions Modal */}
+      {isTransactionModalOpen && (
+        <TransactionsModal
+          book={book}
+          transactions={transactionsData}
+          onClose={handleCloseTransactionModal}
+          isFetching={isFetching}
+          isError={isError}
+        />
       )}
     </div>
   );
@@ -129,4 +139,5 @@ BookItem.propTypes = {
     rentPerDay: PropTypes.number.isRequired,
   }).isRequired,
 };
+
 export default BookItem;
