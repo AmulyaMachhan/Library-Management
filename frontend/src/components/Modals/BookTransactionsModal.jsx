@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { createPortal } from "react-dom";
 
 const BookTransactionsModal = ({
   book,
@@ -20,9 +21,9 @@ const BookTransactionsModal = ({
   }, [onClose]);
 
   console.log(transactions);
-  return (
+  const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-5xl p-6 relative">
         {/* Modal Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">
@@ -99,6 +100,8 @@ const BookTransactionsModal = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 BookTransactionsModal.propTypes = {
