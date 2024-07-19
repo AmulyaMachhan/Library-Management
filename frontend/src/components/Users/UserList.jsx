@@ -9,7 +9,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
-import BooksRentedByUser from "./BooksRentedByUser"; // Import the new component
+import BooksRentedByUser from "./BooksRentedByUser";
 
 const UserList = ({ users }) => {
   const [sorting, setSorting] = useState([]);
