@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useGetAllUsersQuery } from "../../redux/api/userApiSlice";
 import { useIssueBookMutation } from "../../redux/api/transactionApiSlice";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { createPortal } from "react-dom";
 
 const RentModal = ({ book, onClose }) => {
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -16,7 +17,6 @@ const RentModal = ({ book, onClose }) => {
       toast.error("Please select a user.");
       return;
     }
-    console.log(selectedUserId);
 
     try {
       await issueBook({
@@ -31,30 +31,31 @@ const RentModal = ({ book, onClose }) => {
     }
   };
 
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+  // Modal content
+  const modalContent = (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Rent Book</h2>
+          <h2 className="text-3xl font-bold">Rent Book</h2>
           <button
             onClick={onClose}
             className="text-red-500 hover:text-gray-800 mb-1"
           >
-            <IoIosCloseCircleOutline size={22} />
+            <IoIosCloseCircleOutline size={28} />
           </button>
         </div>
-        <p className="mb-4">Renting &quot;{book.name}&quot;.</p>
+        <p className="mb-6 text-lg">Renting &quot;{book.name}&quot;.</p>
 
         {/* User Selection */}
-        <div className="mb-4">
-          <label htmlFor="user" className="block text-gray-700 mb-2">
+        <div className="mb-6">
+          <label htmlFor="user" className="block text-gray-700 mb-2 text-lg">
             Select User:
           </label>
           <select
             id="user"
             value={selectedUserId}
             onChange={(e) => setSelectedUserId(e.target.value)}
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full border border-gray-300 rounded p-3 text-lg"
           >
             <option value="">Select User</option>
             {users?.map((user) => (
@@ -66,16 +67,16 @@ const RentModal = ({ book, onClose }) => {
         </div>
 
         {/* Modal Actions */}
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded-lg"
+            className="px-6 py-3 bg-gray-300 rounded-lg text-lg"
           >
             Cancel
           </button>
           <button
             onClick={handleRent}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg"
           >
             Rent
           </button>
@@ -83,11 +84,13 @@ const RentModal = ({ book, onClose }) => {
       </div>
     </div>
   );
+
+  // Use createPortal to render modal content at the root level
+  return createPortal(modalContent, document.body);
 };
 
 RentModal.propTypes = {
   book: PropTypes.object.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
