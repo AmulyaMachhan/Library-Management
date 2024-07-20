@@ -4,6 +4,12 @@
 
 The Library Management System is a full-stack application that manages users, books, transactions, and more. It consists of a backend API and a frontend web application.
 
+## Frontend Application
+
+The frontend application is a user-friendly interface for interacting with the Library Management System. It allows users to manage books, view transactions, and perform other tasks through a web-based interface.
+
+- **Frontend URL:** [https://library-management-d9up.vercel.app/](https://library-management-d9up.vercel.app/)
+
 ## Backend API
 
 The backend API provides endpoints for managing users, books, and transactions. The API is hosted on:
@@ -11,12 +17,6 @@ The backend API provides endpoints for managing users, books, and transactions. 
 - **Base URL:** `https://library-management-nu-seven.vercel.app/api/v1`
 
 For detailed documentation on the available endpoints, please refer to the [Backend API Documentation](#backend-api-documentation).
-
-## Frontend Application
-
-The frontend application is a user-friendly interface for interacting with the Library Management System. It allows users to manage books, view transactions, and perform other tasks through a web-based interface.
-
-- **Frontend URL:** [https://library-management-d9up.vercel.app/](https://library-management-d9up.vercel.app/)
 
 ## Backend API Documentation
 
