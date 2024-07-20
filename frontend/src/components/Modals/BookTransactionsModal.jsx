@@ -25,8 +25,11 @@ const BookTransactionsModal = ({
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative">
         {/* Modal Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-2xl font-semibold flex justify-center items-center gap-3">
             Total Transactions for {book.name}
+            <div className="flex items-center text-lg px-3 py-1 gap-2 font-[600] text-blue-600 bg-[#edf2f8] border border-[#60aaf0] rounded-xl">
+              <span>{transactions?.totalCount}</span>
+            </div>
           </h2>
           <button
             onClick={onClose}
