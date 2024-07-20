@@ -2,7 +2,7 @@ function Home() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-5xl font-extrabold text-indigo-600 mb-8">
-        Library CO.
+        LIBRARY CO.
       </h1>
 
       <section className="mb-12">
