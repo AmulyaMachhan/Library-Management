@@ -10,6 +10,8 @@ The frontend application is a user-friendly interface for interacting with the L
 
 - **Frontend URL:** [https://library-management-d9up.vercel.app/](https://library-management-d9up.vercel.app/)
 
+![localhost_5173_books](https://github.com/user-attachments/assets/3cb24dfc-b9f7-4052-82f0-5e3d213c08c1)
+
 ## Backend API
 
 The backend API provides endpoints for managing users, books, and transactions. The API is hosted on:
