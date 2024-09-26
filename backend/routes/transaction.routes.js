@@ -3,6 +3,8 @@ import {
   getAllTransactions,
   getBooksByDateInterval,
   getBooksRentedByUser,
+  getTotalBooksIssuedPerDay,
+  getTotalBooksReturnedPerDay,
   getTotalRentByBook,
   getTransactionsByBook,
   getUsersWithIssuedBook,
@@ -17,6 +19,8 @@ router.route("/return").post(returnBook);
 
 router.route("/book").get(getTransactionsByBook);
 router.route("/book/rent").get(getTotalRentByBook);
+router.route("/book/issued").get(getTotalBooksIssuedPerDay);
+router.route("/book/returned").get(getTotalBooksReturnedPerDay);
 
 router.route("/user/:userId").get(getBooksRentedByUser);
 router.route("/users/book").get(getUsersWithIssuedBook);
