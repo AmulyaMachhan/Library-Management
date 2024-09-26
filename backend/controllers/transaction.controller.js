@@ -237,3 +237,109 @@ export const getUsersWithIssuedBook = asyncHandler(async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+export const getTotalBooksIssuedPerDay = asyncHandler(async (req, res) => {
+  try {
+    const totalBooksIssuedPerDay = await Transaction.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$issueDate" },
+          },
+          totalBooksIssued: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(totalBooksIssuedPerDay);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export const getTotalBooksReturnedPerDay = asyncHandler(async (req, res) => {
+  try {
+    const totalBooksReturnedPerDay = await Transaction.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$returnDate" },
+          },
+          totalBooksReturned: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(totalBooksReturnedPerDay);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export const getTotalBooksIssuedPerDayUsingMapReduce = asyncHandler(
+  async (req, res) => {
+    try {
+      const map = function () {
+        const issuedDate = this.issueDate.toISOString().split("T")[0];
+        emit(issuedDate, 1);
+      };
+
+      const reduce = function (key, values) {
+        return Array.sum(values);
+      };
+
+      const totalBooksIssuedPerDay = await Transaction.mapReduce({
+        map,
+        reduce,
+        out: { inline: 1 },
+      });
+
+      res.status(200).json(totalBooksIssuedPerDay);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
+
+export const getTotalBooksIssuedPerDayUsingSimpleDSA = asyncHandler(
+  async (req, res) => {
+    try {
+      const transactions = await Transaction.find({}, "issueDate");
+
+      const booksIssuedPerDay = {};
+
+      transactions.forEach((transaction) => {
+        const issuedDate = transaction.issueDate.toISOString().split("T")[0];
+
+        if (booksIssuedPerDay[issuedDate]) {
+          booksIssuedPerDay[issuedDate]++;
+        } else {
+          booksIssuedPerDay[issuedDate] = 1;
+        }
+      });
+
+      const result = [];
+
+      for (const date in booksIssuedPerDay) {
+        result.push({
+          issueDate: date,
+          totalBooksIssued: booksIssuedPerDay[date],
+        });
+      }
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
